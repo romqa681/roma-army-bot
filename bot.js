@@ -128,7 +128,7 @@ function getService() {
   if (state.sentMessages.length >= russianCompliments.length) state.sentMessages.shift();
 
   // Одно объявление emoji
-  const emoji = randomEmojis[Math.floor(Math.random() * randomEmojis.length)];
+  let emoji = randomEmojis[Math.floor(Math.random() * randomEmojis.length)];
 
   if (currentDate < startDate) {
     const daysToStart = Math.ceil((startDate - currentDate) / msPerDay);
@@ -141,6 +141,7 @@ function getService() {
 📅 <b>Начало:</b> 9 июня 2025
 💌 <b>Рома:</b> ${compliment} ${emoji}`;
   } else if (currentDate > endDate) {
+    emoji = randomEmojis[Math.floor(Math.random() * randomEmojis.length)]; // Новый emoji для разнообразия
     return `${getAsciiArt(isNight)}
 ┳━━━━━━━┳
 ┃ <b>РОМА ДОМА!</b> ┃
@@ -149,6 +150,7 @@ function getService() {
 🔥 Рома ждёт тебя! 😘 ${emoji}
 💞 Любовь победила!`;
   } else {
+    emoji = randomEmojis[Math.floor(Math.random() * randomEmojis.length)]; // Новый emoji
     return `${getAsciiArt(isNight)}
 ┳━━━━━━━┳
 ┃ <b>РОМА СЛУЖИТ</b> ┃
@@ -165,7 +167,7 @@ ${progressBar}
 // Клавиатура
 const keyboard = Markup.keyboard([
   ['🪖 Служба Рома', '🎁 Сюрприз'],
-  ['🇦🇴 Հայերեն']
+  ['🇦🇲 Հայերեն']
 ]).resize();
 
 // Команда /start
@@ -206,6 +208,7 @@ bot.command('menu', (ctx) => {
 bot.on('text', (ctx) => {
   try {
     const text = ctx.message.text;
+    let emoji = randomEmojis[Math.floor(Math.random() * randomEmojis.length)];
 
     switch (text) {
       case '🪖 Служба Рома':
@@ -222,7 +225,7 @@ bot.on('text', (ctx) => {
         } while (state.surpriseHistory.includes(surprise) && state.surpriseHistory.length < surprises.length);
         state.surpriseHistory.push(surprise);
         if (state.surpriseHistory.length >= surprises.length) state.surpriseHistory.shift();
-        const emoji = randomEmojis[Math.floor(Math.random() * randomEmojis.length)];
+        emoji = randomEmojis[Math.floor(Math.random() * randomEmojis.length)];
         ctx.reply(
           `┳━━━━━━━┳
 ┃ <b>СЮРПРИЗ!</b> ┃
@@ -232,14 +235,14 @@ bot.on('text', (ctx) => {
         );
         console.log('Сюрприз отправлен');
         break;
-      case '🇦🇴 Հայերեն':
+      case '🇦🇲 Հայերեն':
         let armenianCompliment;
         do {
           armenianCompliment = armenianCompliments[Math.floor(Math.random() * armenianCompliments.length)];
         } while (state.sentArmenianMessages.includes(armenianCompliment) && state.sentArmenianMessages.length < armenianCompliments.length);
         state.sentArmenianMessages.push(armenianCompliment);
         if (state.sentArmenianMessages.length >= armenianCompliments.length) state.sentArmenianMessages.shift();
-        const emoji = randomEmojis[Math.floor(Math.random() * randomEmojis.length)];
+        emoji = randomEmojis[Math.floor(Math.random() * randomEmojis.length)];
         ctx.reply(
           `┳━━━━━━━┳
 ┃ <b>ՀԱՅԵՐԵՆ!</b> ┃
@@ -288,7 +291,7 @@ bot.launch({
 
 // Обработка остановки
 ['SIGINT', 'SIGTERM'].forEach((signal) => {
-  process.on(signal, () => {
+  process.on(signal) => {
     console.log('🛑 Остановка бота...');
     try {
       bot.stop(signal);
