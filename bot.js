@@ -85,14 +85,14 @@ const getAsciiArt = (isNight) => {
 
 // Функция подсчёта службы (Ереван, UTC+4)
 function getService() {
-  const startDate = new Date('2025-06-09T00:00:00+04:00'); // Начало: 9 июня 2025, Ереван
-  const endDate = new Date('2026-07-09T23:59:59+04:00'); // Конец: 9 июля 2026, Ереван
-  const currentDate = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Yerevan' }));
+  const yerevanOffset = 4 * 60 * 60 * 1000; // UTC+4
+  const startDate = new Date('2025-06-09T00:00:00Z'); // Начало: 9 июня 2025
+  const endDate = new Date('2026-07-09T23:59:59Z'); // Конец: 9 июля 2026
+  const currentDate = new Date(Date.now() + yerevanOffset);
 
   const msPerDay = 24 * 60 * 60 * 1000;
   const msPerHour = 60 * 60 * 1000;
   const msPerMinute = 60 * 1000;
-  const msPerSecond = 1000;
 
   const msPassed = currentDate - startDate;
   const msLeft = endDate - currentDate;
@@ -101,18 +101,16 @@ function getService() {
   const daysPassed = Math.floor(msPassed / msPerDay);
   const hoursPassed = Math.floor((msPassed % msPerDay) / msPerHour);
   const minutesPassed = Math.floor((msPassed % msPerHour) / msPerMinute);
-  const secondsPassed = Math.floor((msPassed % msPerMinute) / msPerSecond);
 
   const daysLeft = Math.floor(msLeft / msPerDay);
   const hoursLeft = Math.floor((msLeft % msPerDay) / msPerHour);
   const minutesLeft = Math.floor((msLeft % msPerHour) / msPerMinute);
-  const secondsLeft = Math.floor((msLeft % msPerMinute) / msPerSecond);
 
   const totalDays = Math.ceil(msTotal / msPerDay); // 396 дней
   const progressPercent = daysPassed >= 0 ? ((daysPassed / totalDays) * 100).toFixed(2) : 0;
 
   // Прогресс-бар
-  const barLength = 20; // Укороченный для красоты
+  const barLength = 20;
   const filled = Math.round((progressPercent / 100) * barLength);
   const progressBar = '🟥'.repeat(filled) + '⬜'.repeat(barLength - filled);
 
@@ -128,6 +126,7 @@ function getService() {
   state.sentMessages.push(compliment);
   if (state.sentMessages.length >= russianCompliments.length) state.sentMessages.shift();
 
+  // Единое объявление emoji
   const emoji = randomEmojis[Math.floor(Math.random() * randomEmojis.length)];
 
   if (currentDate < startDate) {
