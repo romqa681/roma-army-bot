@@ -1,0 +1,12 @@
+{
+  "name": "roma-army-bot",
+  "version": "1.0.0",
+  "description": "Telegram bot for Valeria to track Roma's army service",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "dependencies": {
+    "telegraf": "^4.16.3"
+  }
+}
